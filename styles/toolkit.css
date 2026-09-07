@@ -1,0 +1,565 @@
+.gdh-toggle {
+  width: calc(100% - 8px) !important;
+  min-height: 30px !important;
+  margin: 6px 4px 4px !important;
+  padding: 5px 8px !important;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  color: var(--color-text-primary, #eceff3) !important;
+  background: #365c87 !important;
+  background-image: none !important;
+
+  border: 1px solid rgba(150, 178, 210, .72) !important;
+  border-radius: 6px !important;
+
+  box-shadow: none !important;
+  outline: none !important;
+
+  font: inherit !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+
+  cursor: pointer;
+}
+
+.gdh-toggle:hover,
+.gdh-toggle:focus-visible,
+.gdh-toggle.is-open {
+  background: #416e9f !important;
+  border-color: rgba(195, 216, 239, .9) !important;
+}
+
+.gdh-question {
+  width: 18px;
+  height: 18px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid currentColor;
+  border-radius: 50%;
+
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.gdh-panel {
+  margin: 0 4px 6px;
+  overflow: hidden;
+
+  color: #eceff3;
+  background: #17191d;
+
+  border: 1px solid #515760;
+  border-radius: 7px;
+
+  font-size: 13px;
+  line-height: 1.38;
+}
+
+.gdh-panel[hidden] {
+  display: none !important;
+}
+
+.gdh-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+
+  padding: 7px 8px;
+
+  background: #20242a;
+  border-bottom: 1px solid #515760;
+}
+
+.gdh-head-main {
+  min-width: 0;
+}
+
+.gdh-head-main strong,
+.gdh-head-main span {
+  display: block;
+}
+
+.gdh-head-main strong {
+  font-size: 14px;
+  line-height: 1.15;
+}
+
+.gdh-head-main span {
+  margin-top: 2px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: #aeb4bc;
+  font-size: 11px;
+}
+
+.gdh-result-strip {
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gdh-result {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+
+  padding: 2px 4px;
+
+  background: rgba(255, 255, 255, .06);
+  border-radius: 4px;
+}
+
+.gdh-result .symbol {
+  font-size: 14px;
+}
+
+.gdh-result strong {
+  font-size: 9px;
+}
+
+.gdh-note,
+.gdh-inline-note {
+  padding: 5px 8px;
+
+  color: #c9cdd3;
+  background: rgba(255, 255, 255, .025);
+
+  font-size: 9px;
+}
+
+.gdh-note {
+  border-bottom: 1px solid rgba(81, 87, 96, .65);
+}
+
+.gdh-sections {
+  display: grid;
+}
+
+.gdh-section + .gdh-section {
+  border-top: 1px solid #515760;
+}
+
+.gdh-section-head {
+  display: grid;
+  gap: 1px;
+
+  padding: 5px 7px;
+
+  background: #20242a;
+}
+
+.gdh-section-head strong {
+  font-size: 11px;
+}
+
+.gdh-section-head span {
+  color: #aeb4bc;
+  font-size: 8px;
+}
+
+.gdh-options {
+  display: grid;
+}
+
+.gdh-option {
+  display: grid;
+  grid-template-columns: minmax(44px, auto) minmax(0, 1fr);
+  gap: 7px;
+
+  padding: 5px 7px;
+}
+
+.gdh-option + .gdh-option {
+  border-top: 1px solid rgba(81, 87, 96, .35);
+}
+
+.gdh-cost {
+  min-width: 44px;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: center;
+  gap: 2px;
+}
+
+.gdh-symbol {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.gdh-or {
+  margin: 0 1px;
+
+  color: #8f969f;
+  font-size: 7px;
+  text-transform: uppercase;
+}
+
+.gdh-cost-auto,
+.gdh-cost-label {
+  color: #9fa7b1;
+
+  font-family: sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+
+.gdh-option-body {
+  min-width: 0;
+}
+
+.gdh-condition {
+  margin-top: 2px;
+  color: #bdc3ca;
+  font-size: 8px;
+  font-style: italic;
+}
+
+.gdh-source {
+  margin-top: 3px;
+
+  color: #7f8994;
+  font-size: 7px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.gdh-empty {
+  padding: 10px;
+
+  color: #aeb4bc;
+  text-align: center;
+}
+
+.gdh-footer {
+  padding: 5px 7px;
+
+  color: #858d96;
+  background: rgba(0, 0, 0, .14);
+
+  border-top: 1px solid rgba(81, 87, 96, .7);
+
+  font-size: 8px;
+  line-height: 1.25;
+}
+
+
+/* Native Genesys glyph font supplied by the Genesys 0.2.19 system. */
+.gdh-result-glyph {
+  display: inline-block;
+  min-width: .9em;
+
+  font-family: "Genesys Symbols", sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 15px;
+  line-height: 1;
+
+  text-align: center;
+  vertical-align: -0.06em;
+}
+
+.gdh-inline-result {
+  margin: 0 1px;
+  font-size: 1.08em;
+}
+
+/*
+ * The system's customized Genesys font uses B/S as the Boost/Setback
+ * die ligatures. We also provide the standard die colors here so the
+ * helper remains visually correct even outside a native dice-pool row.
+ */
+.gdh-die {
+  display: inline-block;
+  min-width: 1em;
+  margin: 0 1px;
+
+  font-family: "Genesys Symbols", sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 1.12em;
+  line-height: 1;
+
+  -webkit-text-stroke: 1px #111;
+  text-stroke: 1px #111;
+
+  text-align: center;
+  vertical-align: -0.08em;
+}
+
+.gdh-die.die-B {
+  color: #73c9e6;
+}
+
+.gdh-die.die-S {
+  color: #1c1c1c;
+  -webkit-text-stroke: 1px #8e959d;
+  text-stroke: 1px #8e959d;
+}
+
+/* Keep cost columns compact now that they contain actual glyphs. */
+.gdh-cost {
+  min-width: 30px;
+}
+
+.gdh-option {
+  grid-template-columns: minmax(30px, auto) minmax(0, 1fr);
+}
+
+
+/* v1.0.2 readability pass */
+.gdh-panel {
+  font-size: 13px;
+  line-height: 1.38;
+}
+
+.gdh-head-main strong {
+  font-size: 14px;
+}
+
+.gdh-head-main span {
+  font-size: 10px;
+}
+
+.gdh-section-head strong {
+  font-size: 13px;
+}
+
+.gdh-section-head span {
+  font-size: 10px;
+}
+
+.gdh-option-body {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.gdh-condition {
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.gdh-note,
+.gdh-inline-note {
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.gdh-empty {
+  font-size: 12px;
+}
+
+.gdh-section-generic {
+  border-top: 0 !important;
+}
+
+/* Genesys Toolkit v1.1.0: Critical Injury integration */
+.gdh-critical-action {
+  padding: 5px 6px;
+  background: #20242a;
+  border-top: 1px solid #515760;
+}
+
+.gdh-critical-button {
+  width: 100% !important;
+  min-height: 31px !important;
+  color: #fff !important;
+  background: #5d3940 !important;
+  background-image: none !important;
+  border: 1px solid #8c5963 !important;
+  border-radius: 5px !important;
+  box-shadow: none !important;
+  font: inherit !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+
+.gdh-critical-button:hover { background: #71454e !important; }
+
+.gtk-critical-overlay {
+  --gtk-bg: #17191d;
+  --gtk-surface: #20242a;
+  --gtk-raised: #2b3037;
+  --gtk-border: #515760;
+  --gtk-text: #eceff3;
+  --gtk-muted: #aeb4bc;
+  --gtk-action: #365c87;
+  --gtk-action-hover: #416e9f;
+
+  position: fixed;
+  inset: 0;
+  z-index: 10060;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(0,0,0,.30);
+}
+
+.gtk-critical-window {
+  width: min(520px, 96vw);
+  max-height: 90vh;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto minmax(0,1fr) auto;
+  color: var(--gtk-text);
+  background: var(--gtk-bg);
+  border: 1px solid var(--gtk-border);
+  border-radius: 10px;
+  box-shadow: 0 22px 60px rgba(0,0,0,.48);
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.gtk-critical-header,
+.gtk-critical-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px;
+  background: var(--gtk-surface);
+}
+
+.gtk-critical-header { border-bottom: 1px solid var(--gtk-border); }
+.gtk-critical-footer { border-top: 1px solid var(--gtk-border); }
+
+.gtk-critical-header > div { min-width: 0; display: grid; gap: 2px; }
+.gtk-critical-header strong { font-size: 18px; line-height: 1.1; }
+.gtk-critical-header span { color: var(--gtk-muted); font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.gtk-critical-close {
+  min-width: 30px !important;
+  width: 30px !important;
+  min-height: 30px !important;
+  height: 30px !important;
+  padding: 0 !important;
+  color: var(--gtk-text) !important;
+  background: var(--gtk-raised) !important;
+  background-image: none !important;
+  border: 1px solid var(--gtk-border) !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  font: inherit !important;
+  font-size: 18px !important;
+}
+
+.gtk-critical-body { min-height: 0; overflow: auto; display: grid; gap: 10px; padding: 12px; }
+.gtk-critical-field { display: grid; gap: 5px; }
+.gtk-critical-field > span,
+.gtk-critical-current > span,
+.gtk-critical-total > span { color: var(--gtk-muted); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+.gtk-critical-field small,
+.gtk-critical-current small { color: var(--gtk-muted); font-size: 9px; line-height: 1.25; }
+
+.gtk-critical-field input,
+.gtk-critical-field select {
+  width: 100% !important;
+  min-height: 36px !important;
+  box-sizing: border-box !important;
+  padding: 6px 8px !important;
+  color: var(--gtk-text) !important;
+  background: var(--gtk-raised) !important;
+  border: 1px solid var(--gtk-border) !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  outline: none !important;
+  font: inherit !important;
+  font-size: 13px !important;
+}
+
+.gtk-critical-field input:focus,
+.gtk-critical-field select:focus { border-color: var(--gtk-action) !important; box-shadow: inset 0 0 0 1px var(--gtk-action) !important; }
+
+.gtk-critical-current {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap: 3px 8px;
+  align-items: center;
+  padding: 8px 9px;
+  background: var(--gtk-surface);
+  border: 1px solid var(--gtk-border);
+  border-radius: 7px;
+}
+.gtk-critical-current strong { font-size: 18px; }
+.gtk-critical-current small { grid-column: 1 / -1; }
+
+.gtk-critical-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.gtk-critical-wide { grid-column: 1 / -1; }
+
+.gtk-critical-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  background: var(--gtk-surface);
+  border: 1px solid var(--gtk-action);
+  border-radius: 7px;
+}
+.gtk-critical-total strong { font-size: 20px; }
+
+.gtk-critical-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 9px;
+  background: var(--gtk-surface);
+  border: 1px solid var(--gtk-border);
+  border-radius: 7px;
+  cursor: pointer;
+}
+.gtk-critical-check input { width: 16px !important; height: 16px !important; margin: 0 !important; accent-color: var(--gtk-action); }
+
+.gtk-critical-button {
+  min-width: 0 !important;
+  min-height: 36px !important;
+  padding: 6px 10px !important;
+  color: var(--gtk-text) !important;
+  background: var(--gtk-raised) !important;
+  background-image: none !important;
+  border: 1px solid var(--gtk-border) !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  font: inherit !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+.gtk-critical-button:hover:not(:disabled),
+.gtk-critical-close:hover { border-color: var(--gtk-action) !important; box-shadow: inset 0 0 0 1px var(--gtk-action) !important; }
+.gtk-critical-button.gtk-critical-primary { flex: 1 1 auto; color: #fff !important; background: var(--gtk-action) !important; border-color: var(--gtk-action) !important; }
+.gtk-critical-button.gtk-critical-primary:hover:not(:disabled) { background: var(--gtk-action-hover) !important; }
+.gtk-critical-button:disabled { opacity: .4 !important; }
+
+.gtk-critical-chat { display: grid; gap: 7px; font-size: 12px; line-height: 1.35; }
+.gtk-critical-chat h3 { margin: 0; font-size: 16px; }
+.gtk-critical-chat-roll { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 4px; }
+.gtk-critical-chat-roll > span,
+.gtk-critical-chat-row,
+.gtk-critical-chat-breakdown,
+.gtk-critical-chat-status { padding: 5px 6px; background: rgba(0,0,0,.08); border: 1px solid rgba(100,100,100,.32); border-radius: 5px; }
+.gtk-critical-chat-injury { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 7px; background: rgba(93,57,64,.16); border: 1px solid rgba(140,89,99,.55); border-radius: 5px; }
+.gtk-critical-chat-injury strong { font-size: 14px; }
+.gtk-critical-chat-injury span,
+.gtk-critical-chat-breakdown { opacity: .72; font-size: 9px; }
+
+@media (max-width: 600px) {
+  .gtk-critical-grid { grid-template-columns: 1fr; }
+  .gtk-critical-wide { grid-column: auto; }
+  .gtk-critical-chat-roll { grid-template-columns: 1fr; }
+}

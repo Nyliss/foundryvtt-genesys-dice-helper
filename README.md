@@ -1,122 +1,107 @@
-# Genesys Dice Helper
+# Genesys Toolkit
 
-Current release: **v1.0.2**
+A quality-of-life toolkit for the **Genesys Roleplaying System** in **Foundry VTT**.
 
-A compact rules-reference module for **Foundry VTT 13** and the **Mezryss Genesys system**.
-
-After a Genesys skill or attack roll appears in chat, the module adds:
-
-**Help Spending Results**
-
-The button expands only the options that are usable with the remaining Advantage, Threat, Triumph, and Despair.
+This project began as **Genesys Dice Helper**. Starting with v1.1.0 it becomes **Genesys Toolkit**, while keeping the original internal module ID so existing Foundry/Sqyre installations can update normally.
 
 ## Compatibility
 
-This release is written and checked against:
+Built and checked for:
 
 - **Foundry VTT 13.351**
 - **Genesys system 0.2.19**
 
-Foundry VTT 13 uses the `renderChatMessageHTML` hook for final ChatMessage HTML customization. This module uses that v13 hook rather than the older `renderChatMessage` hook.
-
-The Genesys 0.2.19 chat templates expose the roll through:
-
-- `.roll.roll-skill`
-- `.roll-description`
-- `.net-results`
-- `.summary-table`
-- `.qualities`
-
-The module reads those native structures instead of creating a second roll or chat message.
-
-## Rule Sources
-
-The module uses concise paraphrased reference summaries from books the table is expected to own.
-
-### Genesys Core Rulebook
-
-- General result interpretation, pp. 23–24
-- Additional Maneuver from Advantage, p. 98
-- Combat result spending, pp. 103–104
-- Medicine result resolution, p. 61
-- Social encounter result spending and Critical Remarks, pp. 121–123
-- Magic Threat / Despair consequences, pp. 210–211
-
-### Realms of Terrinoth
-
-- Crafting result spending, p. 113
-- Alchemy result spending, p. 114
-- Runes and Verse are treated as magic skills by their Foundry skill category and therefore use the Genesys magic guidance.
-
-The module does **not** invent per-skill numerical spend tables where the Genesys books do not provide one. Ordinary skills instead receive the Core Rulebook's general narrative guidance.
-
 ## Features
 
-- Shows only options whose **actual symbol cost is present in the roll**. A Triumph no longer causes every Advantage-cost option to appear, and Despair no longer expands every Threat-cost option.
-- One Triumph can surface options explicitly listed as "Advantage or Triumph."
-- One Despair can surface options explicitly listed as "Threat or Despair."
-- Combat checks receive the Core combat table.
-- Social skills receive the structured social encounter table.
-- Magic skills receive the Core magic Threat/Despair table.
-- Alchemy can use the Realms of Terrinoth Alchemy table.
-- Mechanics / Ремесло displays a clearly marked optional Crafting section.
-- Medicine shows its automatic wound/strain resolution rule.
-- Weapon Critical Rating is read from the native Genesys attack card when available.
-- Weapon qualities visible in the native attack card are listed as context.
+### 🎲 Dice Helper
+
+Adds **Help Spending Results** directly to native Genesys chat rolls.
+
+- Reads the remaining Advantage, Threat, Triumph, and Despair.
+- Shows only options affordable with the symbols actually rolled.
+- Uses native Genesys result and Boost/Setback glyphs.
+- Supports combat, structured social encounters, magic, Medicine, Alchemy, crafting, and general narrative guidance.
+- Offers **Roll Critical Injury** directly from a qualifying combat result.
+
+### 🧠 Active Genesys Skills Compendium
+
+Genesys 0.2.19 already has a world setting named **Skills Compendium**. The system loads the selected pack into `CONFIG.genesys.skills`.
+
+Genesys Toolkit follows that active source by default. This allows custom Fantasy, Enkor, and other setting skill lists to work without hard-coding a specific pack name.
+
+### 💥 Critical Injuries
+
+The Toolkit adds a Critical Injury workflow based on the Genesys Core Rulebook.
+
+On GM world load it can automatically create:
+
+- **Genesys Toolkit — Critical Injuries** world Item compendium;
+- shared **Genesys Toolkit: Critical Injury** macro.
+
+The roller:
+
+- rolls d100;
+- adds **+10 per existing Critical Injury** automatically;
+- supports **Vicious** (+10 per rank);
+- supports **additional Critical activations** (+10 each beyond the first);
+- accepts any additional positive or negative modifier;
+- finds the resulting Critical Injury;
+- automatically rolls the affected characteristic for Horrific Injury and Gruesome Injury;
+- optionally adds the result as a native Genesys `injury` Item to the Actor;
+- posts the result to chat.
+
+The Toolkit does **not** automatically reduce characteristics or enforce every ongoing Injury effect. Those remain visible on the Injury Item for table/GM adjudication.
+
+### 🌐 English / Українська
+
+The Toolkit has an independent **client language** setting:
+
+- Automatic
+- English
+- Українська
+
+Dice Helper text and Critical Injury UI follow that setting.
+
+The Critical Injury compendium has a separate **world language** setting, because all users in a world share the same compendium.
 
 ## Settings
 
-**World settings**
+Open:
+
+**Game Settings → Configure Settings → Module Settings**
+
+Settings include:
+
+- Module Language / Мова модуля
+- Use Active Genesys Skills Compendium
 - Enable Dice Helper
 - Include Realms of Terrinoth Results
-
-**Client settings**
-- Show Rulebook Sources
 - Show General Narrative Guidance
-- Expand Helper Automatically
+- Expand Dice Helper Automatically
+- Enable Critical Injury Tools
+- Critical Injury Compendium Language
+- Sync Critical Injury Compendium
+- Create Critical Injury Macro
+- Apply Critical Injury by Default
 
 ## Installation
 
-For local testing, extract this archive into:
-
-`FoundryVTT/Data/modules/genesys-dice-helper/`
-
-The folder must contain `module.json` at its root.
-
-Restart Foundry, open the Genesys world, then enable **Genesys Dice Helper** in **Manage Modules**.
-
-## Public release
-
-The manifest is prepared for:
-
-`https://github.com/Nyliss/foundryvtt-genesys-dice-helper`
-
-Once that repository exists, create a GitHub Release tagged `v1.0.0` and attach:
-
-`genesys-dice-helper-v1.0.0.zip`
-
-Then the intended manifest URL will be:
+Manifest URL:
 
 `https://raw.githubusercontent.com/Nyliss/foundryvtt-genesys-dice-helper/main/module.json`
 
-## Copyright / license note
+## Upgrade from Genesys Dice Helper v1.0.x
 
-The module code is MIT licensed.
+The visible module title changes to **Genesys Toolkit**, but the internal module ID remains:
 
-Rules summaries are concise paraphrases provided as a reference aid. They are not a replacement for the Genesys rulebooks, and the module assumes the users own the books from which the rules are referenced.
+`genesys-dice-helper`
 
+This is intentional. Foundry and Sqyre should treat v1.1.0 as an update to the existing module rather than as a separate installation.
 
-## v1.0.1 UI behavior
+## Rules reference
 
-- Result costs use the native Genesys Advantage, Threat, Triumph, and Despair glyphs.
-- Boost and Setback references inside rule text use native colored die glyphs.
-- Per-option source/page labels were removed from the chat card to keep the helper compact.
-- Rulebook sources remain documented here in the README.
+Critical Injury ranges, severities, and mechanics are based on the Genesys Core Rulebook. The included descriptions are concise paraphrases for reference use and are not a replacement for the rulebook.
 
+## License
 
-## v1.0.2 UI changes
-
-- Increased the helper text size for easier reading in the chat sidebar.
-- Removed the extra “General Narrative Guidance” explanatory header from generic suggestions.
-- Removed the extra positive-magic explanatory note.
-- Removed the bottom reference/disclaimer text from the chat card.
+Module code is MIT licensed. Genesys and its trademarks belong to their respective owners. This is an unofficial fan-made quality-of-life module.
