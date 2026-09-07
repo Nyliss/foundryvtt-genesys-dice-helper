@@ -1,6 +1,6 @@
 # Genesys Dice Helper
 
-Current release: **v1.0.1**
+Current release: **v1.0.2**
 
 A compact rules-reference module for **Foundry VTT 13** and the **Mezryss Genesys system**.
 
@@ -112,3 +112,11 @@ Rules summaries are concise paraphrases provided as a reference aid. They are no
 - Boost and Setback references inside rule text use native colored die glyphs.
 - Per-option source/page labels were removed from the chat card to keep the helper compact.
 - Rulebook sources remain documented here in the README.
+
+
+## v1.0.2 UI changes
+
+- Increased the helper text size for easier reading in the chat sidebar.
+- Removed the extra “General Narrative Guidance” explanatory header from generic suggestions.
+- Removed the extra positive-magic explanatory note.
+- Removed the bottom reference/disclaimer text from the chat card.

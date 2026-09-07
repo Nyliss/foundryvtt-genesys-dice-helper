@@ -14,7 +14,7 @@ import {
 const MODULE_ID = "genesys-dice-helper";
 const TESTED_FOUNDRY = "13.351";
 const TESTED_SYSTEM = "0.2.19";
-const MODULE_VERSION = "1.0.1";
+const MODULE_VERSION = "1.0.2";
 
 Hooks.once("init", () => {
   game.settings.register(MODULE_ID, "enabled", {
@@ -263,7 +263,7 @@ function renderHelperPanel(panel, results, skill, context) {
     );
 
     if (game.settings.get(MODULE_ID, "showGeneric")) {
-      sections.push(genericSection(results, "Positive magic results still use normal Genesys narrative interpretation unless a specific spell/effect says otherwise."));
+      sections.push(genericSection(results));
     }
   } else if (special === "alchemy" && includeTerrinoth) {
     sections.push(
@@ -335,10 +335,6 @@ function renderHelperPanel(panel, results, skill, context) {
           : `<div class="gdh-empty">No book-defined result option applies to the remaining symbols.</div>`
       }
     </div>
-
-    <footer class="gdh-footer">
-      This is a reference aid. Result options are not exhaustive, and narrative choices still require table/GM adjudication.
-    </footer>
   `;
 }
 
@@ -385,7 +381,7 @@ function automaticSection(title, entries) {
   `;
 }
 
-function genericSection(results, extraNote = "") {
+function genericSection(results) {
   const entries = [];
 
   if (results.advantage > 0) {
@@ -428,18 +424,7 @@ function genericSection(results, extraNote = "") {
   if (!entries.length) return "";
 
   return `
-    <section class="gdh-section">
-      <div class="gdh-section-head">
-        <strong>General Narrative Guidance</strong>
-        <span>For skills without a dedicated spending table in the Core Rulebook.</span>
-      </div>
-
-      ${
-        extraNote
-          ? `<div class="gdh-inline-note">${escapeHTML(extraNote)}</div>`
-          : ""
-      }
-
+    <section class="gdh-section gdh-section-generic">
       <div class="gdh-options">
         ${entries.map(entry => genericOptionHTML(entry)).join("")}
       </div>

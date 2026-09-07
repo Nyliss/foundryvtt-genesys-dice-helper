@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.2
+
+- Increased helper text size for improved readability.
+- Removed extra generic-guidance explanatory text from chat cards.
+- Removed the positive-magic explanatory note.
+- Removed the bottom reference/disclaimer footer.
+
+
 ## 1.0.1
 
 - Render result costs with native Genesys glyphs instead of letters.

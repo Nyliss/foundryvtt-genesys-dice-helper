@@ -2,7 +2,7 @@
   "id": "genesys-dice-helper",
   "title": "Genesys Dice Helper",
   "description": "Adds a Help Spending Results button to Genesys rolls in chat, using paraphrased result-spending guidance from the Genesys Core Rulebook and Realms of Terrinoth.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "authors": [
     {
       "name": "Nyliss"
@@ -35,7 +35,7 @@
   ],
   "url": "https://github.com/Nyliss/foundryvtt-genesys-dice-helper",
   "manifest": "https://raw.githubusercontent.com/Nyliss/foundryvtt-genesys-dice-helper/main/module.json",
-  "download": "https://github.com/Nyliss/foundryvtt-genesys-dice-helper/releases/download/v1.0.1/genesys-dice-helper-v1.0.1.zip",
+  "download": "https://github.com/Nyliss/foundryvtt-genesys-dice-helper/releases/download/v1.0.2/genesys-dice-helper-v1.0.2.zip",
   "license": "LICENSE",
   "readme": "README.md",
   "bugs": "https://github.com/Nyliss/foundryvtt-genesys-dice-helper/issues"
