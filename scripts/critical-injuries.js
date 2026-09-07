@@ -6,6 +6,8 @@ const PACK_COLLECTION = `world.${PACK_NAME}`;
 const MANAGED_INJURY = "managedCriticalInjury";
 const MANAGED_MACRO = "managedCriticalMacro";
 
+let criticalCompendiumSyncPromise = null;
+
 function esc(value) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -70,10 +72,12 @@ function injuryData(entry, lang, characteristic = null) {
   };
 }
 
-export async function ensureCriticalCompendium({ notify = false } = {}) {
+async function _syncCriticalCompendium({ notify = false } = {}) {
   if (!game.user?.isGM) return game.packs.get(PACK_COLLECTION) ?? null;
   if (!game.settings.get(MODULE_ID, "enableCriticalInjuries")) return null;
-  if (!game.settings.get(MODULE_ID, "syncCriticalCompendium")) return game.packs.get(PACK_COLLECTION) ?? null;
+  if (!game.settings.get(MODULE_ID, "syncCriticalCompendium")) {
+    return game.packs.get(PACK_COLLECTION) ?? null;
+  }
 
   let pack = game.packs.get(PACK_COLLECTION);
 
@@ -88,29 +92,107 @@ export async function ensureCriticalCompendium({ notify = false } = {}) {
       });
     }
 
-    await pack.configure({ locked: false });
-
-    const existing = await pack.getDocuments();
-    const managedIds = existing
-      .filter(doc => doc.getFlag(MODULE_ID, MANAGED_INJURY))
-      .map(doc => doc.id);
-
-    if (managedIds.length) {
-      await pack.documentClass.deleteDocuments(managedIds, { pack: pack.collection });
+    // Foundry does not permit document changes while a compendium is locked.
+    // Always unlock before synchronization, then restore the lock afterward.
+    if (pack.locked) {
+      await pack.configure({ locked: false });
     }
 
+    // Re-read the pack after configuration so we do not operate on stale state.
+    pack = game.packs.get(PACK_COLLECTION) ?? pack;
+
     const lang = compendiumLanguage();
-    const docs = CRITICAL_INJURIES.map(entry => injuryData(entry, lang));
-    await pack.documentClass.createDocuments(docs, { pack: pack.collection });
-    await pack.configure({ locked: true });
+    const existing = await pack.getDocuments();
+
+    // Upsert by our stable criticalKey flag instead of deleting and recreating
+    // the entire pack. This makes synchronization idempotent and repairs
+    // partially-created packs from v1.1.0 safely.
+    const byKey = new Map();
+    const duplicates = [];
+
+    for (const doc of existing) {
+      if (!doc.getFlag(MODULE_ID, MANAGED_INJURY)) continue;
+
+      const key = doc.getFlag(MODULE_ID, "criticalKey");
+      if (!key) {
+        duplicates.push(doc);
+        continue;
+      }
+
+      if (byKey.has(key)) duplicates.push(doc);
+      else byKey.set(key, doc);
+    }
+
+    const createData = [];
+
+    for (const entry of CRITICAL_INJURIES) {
+      const desired = injuryData(entry, lang);
+      const current = byKey.get(entry.key);
+
+      if (current) {
+        await current.update(desired);
+      } else {
+        createData.push(desired);
+      }
+    }
+
+    if (createData.length) {
+      // A different sync path may have changed the pack state meanwhile.
+      // Confirm it is still editable immediately before creation.
+      if (pack.locked) {
+        await pack.configure({ locked: false });
+        pack = game.packs.get(PACK_COLLECTION) ?? pack;
+      }
+
+      await pack.documentClass.createDocuments(createData, {
+        pack: pack.collection
+      });
+    }
+
+    // Clean up duplicate/stale managed entries only after the desired set
+    // exists. Missing-document errors are harmless here and are ignored.
+    for (const doc of duplicates) {
+      try {
+        const fresh = await pack.getDocument(doc.id);
+        if (fresh) await fresh.delete();
+      } catch (error) {
+        const message = String(error?.message ?? error);
+        if (!message.includes("does not exist")) {
+          console.warn("Genesys Toolkit | Could not remove stale Critical Injury entry", error);
+        }
+      }
+    }
+
+    if (!pack.locked) {
+      await pack.configure({ locked: true });
+    }
 
     if (notify) ui.notifications.info(t("critical.compSynced"));
     return pack;
   } catch (error) {
     console.error("Genesys Toolkit | Critical Injury compendium sync failed", error);
     ui.notifications.error(`Genesys Toolkit: ${error.message ?? error}`);
-    try { await pack?.configure({ locked: true }); } catch (_error) {}
-    return pack ?? null;
+
+    // Lock only after all failed write attempts are finished.
+    try {
+      const current = game.packs.get(PACK_COLLECTION) ?? pack;
+      if (current && !current.locked) await current.configure({ locked: true });
+    } catch (_error) {}
+
+    return game.packs.get(PACK_COLLECTION) ?? pack ?? null;
+  }
+}
+
+export async function ensureCriticalCompendium(options = {}) {
+  // Avoid concurrent syncs from ready/onChange/manual calls in the same client.
+  if (criticalCompendiumSyncPromise) return criticalCompendiumSyncPromise;
+
+  criticalCompendiumSyncPromise = _syncCriticalCompendium(options);
+
+  try {
+    return await criticalCompendiumSyncPromise;
+  } finally {
+    criticalCompendiumSyncPromise = null;
   }
 }
 

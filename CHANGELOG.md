@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.1
+
+### Critical Injury compendium hotfix
+
+- Fixed concurrent Critical Injury compendium synchronization.
+- Replaced destructive delete/recreate synchronization with safe upsert-by-key logic.
+- Repairs partially-created Critical Injury compendia left by v1.1.0.
+- Re-checks compendium lock state immediately before writes.
+- Ignores harmless stale-document deletion races.
+- Prevents duplicate synchronization calls in the same client.
+
 ## 1.1.0
 
 ### Module

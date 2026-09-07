@@ -9,7 +9,7 @@ import {
   getCriticalCompendium
 } from "./critical-injuries.js";
 
-const VERSION = "1.1.0";
+const VERSION = "1.1.1";
 const TESTED_FOUNDRY = "13.351";
 const TESTED_SYSTEM = "0.2.19";
 

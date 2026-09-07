@@ -105,3 +105,8 @@ Critical Injury ranges, severities, and mechanics are based on the Genesys Core 
 ## License
 
 Module code is MIT licensed. Genesys and its trademarks belong to their respective owners. This is an unofficial fan-made quality-of-life module.
+
+
+## v1.1.1 Hotfix
+
+v1.1.1 fixes a synchronization race in the automatically managed Critical Injuries world compendium. The update can repair a partially-created v1.1.0 compendium automatically; deleting the existing pack is normally not required.
