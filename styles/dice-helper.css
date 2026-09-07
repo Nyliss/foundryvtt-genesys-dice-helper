@@ -258,3 +258,66 @@
   font-size: 8px;
   line-height: 1.25;
 }
+
+
+/* Native Genesys glyph font supplied by the Genesys 0.2.19 system. */
+.gdh-result-glyph {
+  display: inline-block;
+  min-width: .9em;
+
+  font-family: "Genesys Symbols", sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 15px;
+  line-height: 1;
+
+  text-align: center;
+  vertical-align: -0.06em;
+}
+
+.gdh-inline-result {
+  margin: 0 1px;
+  font-size: 1.08em;
+}
+
+/*
+ * The system's customized Genesys font uses B/S as the Boost/Setback
+ * die ligatures. We also provide the standard die colors here so the
+ * helper remains visually correct even outside a native dice-pool row.
+ */
+.gdh-die {
+  display: inline-block;
+  min-width: 1em;
+  margin: 0 1px;
+
+  font-family: "Genesys Symbols", sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 1.12em;
+  line-height: 1;
+
+  -webkit-text-stroke: 1px #111;
+  text-stroke: 1px #111;
+
+  text-align: center;
+  vertical-align: -0.08em;
+}
+
+.gdh-die.die-B {
+  color: #73c9e6;
+}
+
+.gdh-die.die-S {
+  color: #1c1c1c;
+  -webkit-text-stroke: 1px #8e959d;
+  text-stroke: 1px #8e959d;
+}
+
+/* Keep cost columns compact now that they contain actual glyphs. */
+.gdh-cost {
+  min-width: 30px;
+}
+
+.gdh-option {
+  grid-template-columns: minmax(30px, auto) minmax(0, 1fr);
+}

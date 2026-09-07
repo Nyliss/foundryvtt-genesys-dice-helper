@@ -14,6 +14,7 @@ import {
 const MODULE_ID = "genesys-dice-helper";
 const TESTED_FOUNDRY = "13.351";
 const TESTED_SYSTEM = "0.2.19";
+const MODULE_VERSION = "1.0.1";
 
 Hooks.once("init", () => {
   game.settings.register(MODULE_ID, "enabled", {
@@ -34,15 +35,6 @@ Hooks.once("init", () => {
     type: Boolean,
     default: true,
     restricted: true
-  });
-
-  game.settings.register(MODULE_ID, "showSources", {
-    name: "Show Rulebook Sources",
-    hint: "Shows the book and page used for each suggestion.",
-    scope: "client",
-    config: true,
-    type: Boolean,
-    default: true
   });
 
   game.settings.register(MODULE_ID, "showGeneric", {
@@ -73,13 +65,13 @@ Hooks.once("ready", () => {
   const generation = Number(game.release?.generation ?? 0);
   if (generation !== 13) {
     ui.notifications.warn(
-      `Genesys Dice Helper v1.0.0 is built for Foundry VTT 13 (tested on ${TESTED_FOUNDRY}). Current: ${game.version ?? game.release?.version ?? "unknown"}.`
+      `Genesys Dice Helper v${MODULE_VERSION} is built for Foundry VTT 13 (tested on ${TESTED_FOUNDRY}). Current: ${game.version ?? game.release?.version ?? "unknown"}.`
     );
   }
 
   if (game.system?.version !== TESTED_SYSTEM) {
     ui.notifications.warn(
-      `Genesys Dice Helper v1.0.0 is tested with Genesys ${TESTED_SYSTEM}. Current system version: ${game.system?.version ?? "unknown"}.`
+      `Genesys Dice Helper v${MODULE_VERSION} is tested with Genesys ${TESTED_SYSTEM}. Current system version: ${game.system?.version ?? "unknown"}.`
     );
   }
 });
@@ -229,11 +221,22 @@ function renderHelperPanel(panel, results, skill, context) {
   const special = specialSkillKind(skill.name);
 
   if (context.looksLikeAttack || skill.category === "combat") {
+    const combatOptions = [...COMBAT_SPENDS];
+
+    if (context.criticalRating) {
+      combatOptions.push({
+        symbol: "advantage",
+        cost: context.criticalRating,
+        text: "Завдати 1 Critical Injury, витративши Advantage відповідно до Critical Rating зброї.",
+        condition: "Потрібна успішна атака, яка завдала Wounds після Soak."
+      });
+    }
+
     sections.push(
       spendSection(
         "Combat",
         "Core combat result options",
-        COMBAT_SPENDS,
+        combatOptions,
         results,
         context
       )
@@ -315,13 +318,13 @@ function renderHelperPanel(panel, results, skill, context) {
 
     ${
       context.looksLikeAttack && context.criticalRating
-        ? `<div class="gdh-note"><strong>Weapon Critical:</strong> ${context.criticalRating} Advantage. A Triumph can trigger one Critical Injury regardless of the weapon's Critical Rating.</div>`
+        ? `<div class="gdh-note"><strong>Weapon Critical:</strong> ${costHTML("advantage", context.criticalRating)}. ${costHTML("triumph", 1)} can trigger one Critical Injury regardless of the weapon's Critical Rating.</div>`
         : ""
     }
 
     ${
       context.qualities.length
-        ? `<div class="gdh-note"><strong>Weapon qualities on this roll:</strong> ${context.qualities.map(escapeHTML).join(", ")}. Their activation costs still come from the item quality itself.</div>`
+        ? `<div class="gdh-note"><strong>Weapon qualities on this roll:</strong> ${context.qualities.map(escapeHTML).join(", ")}. Their normal activation costs still apply unless you spend ${costHTML("triumph", 1)}.</div>`
         : ""
     }
 
@@ -373,8 +376,7 @@ function automaticSection(title, entries) {
           <div class="gdh-option">
             <div class="gdh-cost gdh-cost-auto">AUTO</div>
             <div class="gdh-option-body">
-              <div>${escapeHTML(entry.text)}</div>
-              ${sourceHTML(entry.source)}
+              <div>${formatRuleText(entry.text)}</div>
             </div>
           </div>
         `).join("")}
@@ -447,25 +449,11 @@ function genericSection(results, extraNote = "") {
 
 function canUseOption(option, results, context) {
   if (option.symbol === "advantage") {
-    if (
-      context.criticalRating &&
-      option.text.includes("Critical Injury") &&
-      !option.altTriumph
-    ) {
-      return results.advantage >= context.criticalRating;
-    }
-
-    return (
-      results.advantage >= option.cost ||
-      (option.altTriumph && results.triumph >= 1)
-    );
+    return results.advantage >= option.cost;
   }
 
   if (option.symbol === "threat") {
-    return (
-      results.threat >= option.cost ||
-      (option.altDespair && results.despair >= 1)
-    );
+    return results.threat >= option.cost;
   }
 
   if (option.symbol === "triumph") {
@@ -480,27 +468,16 @@ function canUseOption(option, results, context) {
 }
 
 function spendOptionHTML(option, context) {
-  let displayCost = costHTML(option.symbol, option.cost);
-
-  if (option.altTriumph && option.symbol === "advantage") {
-    displayCost += `<span class="gdh-or">or</span>${costHTML("triumph", 1)}`;
-  }
-
-  if (option.altDespair && option.symbol === "threat") {
-    displayCost += `<span class="gdh-or">or</span>${costHTML("despair", 1)}`;
-  }
-
   return `
     <div class="gdh-option">
-      <div class="gdh-cost">${displayCost}</div>
+      <div class="gdh-cost">${costHTML(option.symbol, option.cost)}</div>
       <div class="gdh-option-body">
-        <div>${escapeHTML(option.text)}</div>
+        <div>${formatRuleText(option.text)}</div>
         ${
           option.condition
-            ? `<div class="gdh-condition">${escapeHTML(option.condition)}</div>`
+            ? `<div class="gdh-condition">${formatRuleText(option.condition)}</div>`
             : ""
         }
-        ${sourceHTML(option.source)}
       </div>
     </div>
   `;
@@ -510,24 +487,15 @@ function genericOptionHTML(entry) {
   return `
     <div class="gdh-option">
       <div class="gdh-cost">
-        ${
-          entry.cost
-            ? costHTML(entry.symbol, entry.cost)
-            : `<span class="gdh-cost-label">${symbolLabel(entry.symbol)}</span>`
-        }
+        ${costHTML(entry.symbol, entry.cost ?? 1)}
       </div>
       <div class="gdh-option-body">
-        <div>${escapeHTML(entry.text)}</div>
-        ${sourceHTML(entry.source)}
+        <div>${formatRuleText(entry.text)}</div>
       </div>
     </div>
   `;
 }
 
-function sourceHTML(source) {
-  if (!game.settings.get(MODULE_ID, "showSources")) return "";
-  return `<div class="gdh-source">${escapeHTML(source)}</div>`;
-}
 
 function costHTML(symbol, cost) {
   const letter = {
@@ -541,8 +509,57 @@ function costHTML(symbol, cost) {
 
   return Array.from(
     { length: Math.max(1, Number(cost) || 1) },
-    () => `<span class="symbol gdh-symbol">${letter}</span>`
+    () => `<span class="gdh-result-glyph" aria-hidden="true">${letter}</span>`
   ).join("");
+}
+
+function dieHTML(kind) {
+  const data = {
+    boost: {
+      letter: "B",
+      className: "die-B",
+      label: "Boost die"
+    },
+    setback: {
+      letter: "S",
+      className: "die-S",
+      label: "Setback die"
+    }
+  }[kind];
+
+  if (!data) return "";
+
+  return `<span class="gdh-die ${data.className}" role="img" aria-label="${data.label}" title="${data.label}">${data.letter}</span>`;
+}
+
+function resultGlyphHTML(kind) {
+  const data = {
+    Advantage: ["a", "Advantage"],
+    Threat: ["h", "Threat"],
+    Triumph: ["t", "Triumph"],
+    Despair: ["d", "Despair"],
+    Success: ["s", "Success"],
+    Failure: ["f", "Failure"]
+  }[kind];
+
+  if (!data) return kind;
+
+  return `<span class="gdh-result-glyph gdh-inline-result" role="img" aria-label="${data[1]}" title="${data[1]}">${data[0]}</span>`;
+}
+
+function formatRuleText(value) {
+  let text = escapeHTML(value);
+
+  // Dice first.
+  text = text.replaceAll("Boost", dieHTML("boost"));
+  text = text.replaceAll("Setback", dieHTML("setback"));
+
+  // Narrative result symbols.
+  for (const word of ["Advantage", "Threat", "Triumph", "Despair", "Success", "Failure"]) {
+    text = text.replaceAll(word, resultGlyphHTML(word));
+  }
+
+  return text;
 }
 
 function resultStrip(results) {
@@ -555,21 +572,13 @@ function resultStrip(results) {
     .filter(([key]) => results[key] > 0)
     .map(([key, letter]) => `
       <span class="gdh-result">
-        <span class="symbol">${letter}</span>
+        <span class="gdh-result-glyph">${letter}</span>
         <strong>${results[key]}</strong>
       </span>
     `)
     .join("");
 }
 
-function symbolLabel(symbol) {
-  return {
-    advantage: "Advantage",
-    threat: "Threat",
-    triumph: "Triumph",
-    despair: "Despair"
-  }[symbol] ?? "";
-}
 
 function escapeHTML(value) {
   return String(value ?? "")

@@ -41,10 +41,6 @@ export const COMBAT_SPENDS = Object.freeze([
   spend(A, 1, "Відновити 1 Strain.", SOURCES.combat, { altTriumph: true, repeatable: true }),
   spend(A, 1, "Додати Boost до наступної перевірки наступного союзного активного персонажа.", SOURCES.combat, { altTriumph: true }),
   spend(A, 1, "Помітити важливу деталь у поточному конфлікті.", SOURCES.combat, { altTriumph: true }),
-  spend(A, 1, "Активувати Critical Injury або item quality; фактична вартість Advantage залежить від Critical Rating чи властивості.", SOURCES.combat, {
-    altTriumph: true,
-    condition: "Critical Injury потребує успішної атаки, яка завдала Wounds після Soak."
-  }),
 
   spend(A, 2, "Негайно виконати безкоштовний Maneuver, не перевищуючи ліміт у два Maneuvers за хід.", SOURCES.combat, { altTriumph: true }),
   spend(A, 2, "Додати Setback до наступної перевірки цілі.", SOURCES.combat, { altTriumph: true }),
@@ -56,6 +52,10 @@ export const COMBAT_SPENDS = Object.freeze([
   spend(A, 3, "Отримати +1 Melee Defense або Ranged Defense до кінця наступного ходу активного персонажа.", SOURCES.combat, { altTriumph: true }),
   spend(A, 3, "Змусити ціль упустити зброю, яку вона тримає.", SOURCES.combat, { altTriumph: true }),
 
+  spend(T, 1, "Завдати 1 Critical Injury незалежно від Critical Rating зброї.", SOURCES.combat, {
+    condition: "Потрібна успішна атака, яка завдала Wounds після Soak."
+  }),
+  spend(T, 1, "Активувати одну active item quality незалежно від її звичайної Advantage cost.", SOURCES.combat),
   spend(T, 1, "Upgrade difficulty наступної перевірки цілі.", SOURCES.combat),
   spend(T, 1, "Upgrade ability наступної перевірки будь-якого союзника, включно з активним персонажем.", SOURCES.combat),
   spend(T, 1, "Створити важливу вирішальну перевагу в сцені, якщо GM погоджується.", SOURCES.combat),

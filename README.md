@@ -1,5 +1,7 @@
 # Genesys Dice Helper
 
+Current release: **v1.0.1**
+
 A compact rules-reference module for **Foundry VTT 13** and the **Mezryss Genesys system**.
 
 After a Genesys skill or attack roll appears in chat, the module adds:
@@ -50,7 +52,7 @@ The module does **not** invent per-skill numerical spend tables where the Genesy
 
 ## Features
 
-- Shows only currently affordable result options.
+- Shows only options whose **actual symbol cost is present in the roll**. A Triumph no longer causes every Advantage-cost option to appear, and Despair no longer expands every Threat-cost option.
 - One Triumph can surface options explicitly listed as "Advantage or Triumph."
 - One Despair can surface options explicitly listed as "Threat or Despair."
 - Combat checks receive the Core combat table.
@@ -102,3 +104,11 @@ Then the intended manifest URL will be:
 The module code is MIT licensed.
 
 Rules summaries are concise paraphrases provided as a reference aid. They are not a replacement for the Genesys rulebooks, and the module assumes the users own the books from which the rules are referenced.
+
+
+## v1.0.1 UI behavior
+
+- Result costs use the native Genesys Advantage, Threat, Triumph, and Despair glyphs.
+- Boost and Setback references inside rule text use native colored die glyphs.
+- Per-option source/page labels were removed from the chat card to keep the helper compact.
+- Rulebook sources remain documented here in the README.

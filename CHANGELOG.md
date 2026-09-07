@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.1
+
+- Render result costs with native Genesys glyphs instead of letters.
+- Render Boost and Setback as native colored dice inside suggestion text.
+- Only show options that can be paid with the actual symbol counts rolled.
+- Stop using Triumph as a blanket substitute that reveals all Advantage options.
+- Stop using Despair as a blanket substitute that reveals all Threat options.
+- Added explicit Triumph options for triggering a Critical Injury or active item quality.
+- Added dynamic Advantage cost for Critical Injury based on the weapon's Critical Rating.
+- Removed source/page labels from each suggestion row.
+
+
 ## 1.0.0
 
 - First public-ready Dice Helper build.
